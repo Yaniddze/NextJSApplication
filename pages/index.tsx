@@ -10,6 +10,7 @@ import { Header } from '../components/header';
 import { Title } from '../components/Title';
 import { UserHolder } from '../components/UserHolder';
 import { InfoHolder } from '../components/InfoHolder';
+import { InfoEditor } from "../components/InfoEditor";
 
 const ContainerWrapper = styled(Container)`
   & > div {
@@ -26,6 +27,10 @@ export default function Home(): ReactElement {
   const infoHolder = !editing && (
     <InfoHolder email={email} phone={phone} />
   );
+
+  const infoEditor = editing && (
+    <InfoEditor />
+  )
   
   return (
     <div>
@@ -34,6 +39,7 @@ export default function Home(): ReactElement {
         <Title text="Личный профиль" subText="Главная/Личный профиль" />
         <UserHolder username={username} onEditChange={setEditing} />
         {infoHolder}
+        {infoEditor}
       </ContainerWrapper>
     </div>
   );
