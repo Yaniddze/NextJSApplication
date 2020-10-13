@@ -9,6 +9,7 @@ import Container from '@material-ui/core/Container';
 import { Header } from '../components/header';
 import { Title } from '../components/Title';
 import { UserHolder } from '../components/UserHolder';
+import { InfoHolder } from '../components/InfoHolder';
 
 const ContainerWrapper = styled(Container)`
   & > div {
@@ -18,7 +19,13 @@ const ContainerWrapper = styled(Container)`
 
 export default function Home(): ReactElement {
   const username = 'Иванов Иван Иванович';
+  const email = 'yanyanyan@mail.ru';
+  const phone = '';
   const [editing, setEditing] = useState(false);
+
+  const infoHolder = !editing && (
+    <InfoHolder email={email} phone={phone} />
+  );
   
   return (
     <div>
@@ -26,6 +33,7 @@ export default function Home(): ReactElement {
       <ContainerWrapper maxWidth="lg">
         <Title text="Личный профиль" subText="Главная/Личный профиль" />
         <UserHolder username={username} onEditChange={setEditing} />
+        {infoHolder}
       </ContainerWrapper>
     </div>
   );
