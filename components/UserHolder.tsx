@@ -14,6 +14,8 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  
   color: white;
   
   & > div:first-child, & > div:last-child {
