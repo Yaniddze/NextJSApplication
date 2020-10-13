@@ -1,7 +1,12 @@
-import '../styles/globals.css';
+import { FC, ReactNode } from 'react';
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+type PropTypes = {
+  Component: FC,
+  pageProps: any,
 }
 
-export default MyApp;
+export default function MyApp(
+  { Component, pageProps }: PropTypes,
+): ReactNode {
+  return <Component {...pageProps} />;
+}
