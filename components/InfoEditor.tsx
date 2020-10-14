@@ -7,14 +7,14 @@ import styled from 'styled-components';
 
 import InputMask from 'react-input-mask';
 
-import { DialogWindow } from './DialogWindow';
-
 // Material components
 import { TextField, withStyles } from '@material-ui/core';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import PhoneIcon from '@material-ui/icons/Phone';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import Button from '@material-ui/core/Button';
+
+import { DialogWindow } from './DialogWindow';
 
 const Wrapper = styled.div`
   height: 245px;
@@ -151,17 +151,25 @@ export const InfoEditor: FC<PropTypes> = (
 
     setSubmitted(true);
   };
+
+  const handleDialogSuccess = (): void => {
+    setDialogShow(false);
+    onSubmit(userInfo);
+  };
+
+  const handleDialogFailed = (): void => {
+    setDialogShow(false);
+  };
   
   return (
     <Wrapper>
       <DialogWindow
         open={dialogShow}
-        onSuccess={() => {setDialogShow(false)}}
-        onFailed={() => {setDialogShow(false)}}
+        onSuccess={handleDialogSuccess}
+        onFailed={handleDialogFailed}
         successTitle="Сохранить"
         failedTitle="Не сохранять"
-        title="Ешеду"
-        text="Сохранить изменения"
+        text="Сохранить изменения?"
       />
       <form>
 
