@@ -51,8 +51,8 @@ const TextWrapper = styled.div<MobileProp>`
   }
 `;
 
-const ButtonWrapper = styled.div`
-  display: flex;
+const ButtonWrapper = styled.div<MobileProp>`
+  display: ${(props): string => (props.mobile ? 'none' : 'flex')};
   margin-top: 20px;
   
   > div {
@@ -101,7 +101,7 @@ export const ModalWindow: FC<PropTypes> = (
           </div>
         </TextWrapper>
 
-        <ButtonWrapper>
+        <ButtonWrapper mobile={mobile}>
           <RoundButton title="Хорошо" onClick={onClose} />
         </ButtonWrapper>
 
