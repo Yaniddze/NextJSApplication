@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import { User } from '../domain/types';
 
 const userKey = 'user';
@@ -26,6 +28,7 @@ export const useUserStorage = (): ReturnType => {
   const changeUser = (newUser: User) => {
     setUser(newUser);
     window.localStorage.setItem(userKey, JSON.stringify(newUser));
+    axios.post('http://localhost:3000/api/onsave', newUser);
   };
 
   return {
