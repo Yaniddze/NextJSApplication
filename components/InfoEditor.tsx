@@ -14,7 +14,7 @@ import PhoneIcon from '@material-ui/icons/Phone';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import Button from '@material-ui/core/Button';
 
-import { DialogWindow } from './DialogWindow';
+import { DialogWindow } from './modal';
 
 const Wrapper = styled.div`
   height: 245px;
