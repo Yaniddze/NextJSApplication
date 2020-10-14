@@ -1,10 +1,13 @@
+// Core
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import { TextField } from '@material-ui/core';
+// Material components
+import { TextField, withStyles } from '@material-ui/core';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import PhoneIcon from '@material-ui/icons/Phone';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import Button from '@material-ui/core/Button';
 
 const Wrapper = styled.div`
   height: 245px;
@@ -14,10 +17,11 @@ const Wrapper = styled.div`
   border-radius: 10px;
   
   & > form {
-    padding-top: 20px;
+    height: 100%;
 
     > div:first-child {
-    
+      padding-top: 20px;
+
       display: flex;
       
       height: 100px;
@@ -57,6 +61,27 @@ const WrappedTexField = styled(TextField)`
     font-size: 14px;
   }
 `;
+
+const ButtonWrapper = styled.div`
+  width: 100%;
+  height: 125px;
+  display: flex;
+  
+  > button {
+    margin: auto;
+  }
+`;
+
+const StyledButton = withStyles({
+  root: {
+    borderRadius: 50,
+    color: 'white',
+    fontSize: '14px',
+    textTransform: 'none',
+    fontWeight: 'normal',
+    padding: '10px 15px',
+  },
+})(Button);
 
 export const InfoEditor: FC = () => (
   <Wrapper>
@@ -104,6 +129,12 @@ export const InfoEditor: FC = () => (
           />
         </div>
       </div>
+
+      <ButtonWrapper>
+        <StyledButton variant="contained" color="primary">
+          Сохранить изменения
+        </StyledButton>
+      </ButtonWrapper>
 
     </form>
 
