@@ -9,11 +9,11 @@ import { AccountIcon } from './AccountIcon';
 import { MinWidths } from '../app/screens';
 import { useScreens } from '../hooks/useScreens';
 
-type WidthProps = {
+type MobileProps = {
   mobile: boolean;
 }
 
-const Wrapper = styled.div<WidthProps>`
+const Wrapper = styled.div<MobileProps>`
   height: ${(props): string => (props.mobile ? '70' : '130')}px;
 
   border-radius: 10px;
@@ -32,7 +32,7 @@ const Wrapper = styled.div<WidthProps>`
   }
 `;
 
-const LeftWrapper = styled.div<WidthProps>`
+const LeftWrapper = styled.div<MobileProps>`
   ${(props): string => {
     if (props.mobile) {
       return `
@@ -57,7 +57,7 @@ const LeftWrapper = styled.div<WidthProps>`
   }}
 `;
 
-const RightWrapper = styled.div<WidthProps>`
+const RightWrapper = styled.div<MobileProps>`
   ${(props): string => {
     if (props.mobile) {
       return `
@@ -80,7 +80,7 @@ const RightWrapper = styled.div<WidthProps>`
   
 `;
 
-const IconTitleWrapper = styled.div<WidthProps>`
+const IconTitleWrapper = styled.div<MobileProps>`
   display: ${(props): string => (props.mobile ? 'none' : 'block')};
 `;
 

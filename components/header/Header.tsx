@@ -12,7 +12,11 @@ import { AccountIcon } from '../AccountIcon';
 import { MinWidths } from '../../app/screens';
 import { useScreens } from '../../hooks/useScreens';
 
-const Wrapper = styled.div`
+type MobileProps = {
+  mobile: boolean;
+}
+
+const Wrapper = styled.div<MobileProps>`
   height: 60px;
   display: flex;
   
@@ -22,11 +26,11 @@ const Wrapper = styled.div`
   
   > div:first-child {
     margin-left: auto;
-    margin-right: 50px;
+    margin-right: ${(props): string => (props.mobile ? '10' : '50')}px;
   }
 `;
 
-const IconsHolder = styled.div`
+const IconsHolder = styled.div<MobileProps>`
   display: flex;
   align-items: center;
   
@@ -34,32 +38,14 @@ const IconsHolder = styled.div`
     background-color: white;
     width: 1px;
     height: 26px;
-    margin: 0 10px;
-  }
-  
-  @media(min-width:${MinWidths.PC}px) {
-      & > span {
-      margin: 0 20px;
-    }
+    margin: 0 ${(props): string => (props.mobile ? '10' : '20')}px;
   }
 `;
 
-const NotificationWrapper = styled(NotificationsNoneIcon)`
-  @media(min-width:${MinWidths.PC}px){
-    margin-right: 6px;
-  }
-`;
-
-const NameWrapper = styled.div`
+const NameWrapper = styled.div<MobileProps>`
   margin-left: 20px;
   font-size: 14px;
-  display: none;
-  
-  @media(min-width:${MinWidths.PC}px) {
-    & {
-      display: block;
-    }
-  }
+  display: ${(props): string => (props.mobile ? 'none' : 'block')};
 `;
 
 type PropTypes = {
@@ -74,12 +60,16 @@ export const Header: FC<PropTypes> = (
 
   let iconSize = 0;
 
+  let mobile = false;
+
   switch (screen) {
     case MinWidths.Mobile:
+      mobile = true;
       iconSize = 24;
       break;
 
     case MinWidths.PC:
+      mobile = false;
       iconSize = 40;
       break;
 
@@ -93,12 +83,12 @@ export const Header: FC<PropTypes> = (
   const nameToShow = `${splitName[0]} ${splitName[1][0]}.`;
 
   return (
-    <Wrapper>
-      <IconsHolder>
-        <NotificationWrapper height={30} width={25} />
+    <Wrapper mobile={mobile}>
+      <IconsHolder mobile={mobile}>
+        <NotificationsNoneIcon height={30} width={25} />
         <span />
         <AccountIcon height={iconSize} width={iconSize} />
-        <NameWrapper>
+        <NameWrapper mobile={mobile}>
           { nameToShow }
         </NameWrapper>
       </IconsHolder>
