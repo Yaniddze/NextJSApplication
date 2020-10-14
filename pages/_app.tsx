@@ -1,5 +1,8 @@
 import { FC, ReactNode } from 'react';
 import { createGlobalStyle } from 'styled-components';
+import { ThemeProvider } from '@material-ui/styles';
+
+import { theme } from '../app/themes';
 
 type PropTypes = {
   Component: FC,
@@ -21,7 +24,9 @@ export default function MyApp(
   return (
     <>
       <Styles />
-      <Component {...pageProps} />
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </>
   );
 }
