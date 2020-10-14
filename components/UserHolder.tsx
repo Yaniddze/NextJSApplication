@@ -50,22 +50,17 @@ const RightWrapper = styled.div`
 type PropTypes = {
   children?: never;
   username: string;
-  onEditChange: (editing: boolean) => void;
+  onEditChange: () => void;
+  editing: boolean;
 }
 
 export const UserHolder: FC<PropTypes> = (
-  { username, onEditChange }: PropTypes,
+  { username, onEditChange, editing }: PropTypes,
 ) => {
-  const [editing, setEditing] = useState(false);
-
   const handleClick = (event: MouseEvent) => {
     event.preventDefault();
 
-    setEditing((old) => {
-      onEditChange(!old);
-
-      return !old;
-    });
+    onEditChange();
   };
 
   const editButton = !editing && (

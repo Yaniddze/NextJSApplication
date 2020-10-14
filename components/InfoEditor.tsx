@@ -88,7 +88,7 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-type FormValues = {
+export type FormValues = {
   username: string,
   email: string,
   phone: string,
