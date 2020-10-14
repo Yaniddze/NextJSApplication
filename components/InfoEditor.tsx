@@ -16,8 +16,15 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import { DialogWindow } from './modal';
 import { RoundButton } from './buttons';
 
-const Wrapper = styled.div`
-  height: 245px;
+import { MinWidths } from '../app/screens';
+import { useScreens } from '../hooks/useScreens';
+
+type MobileProp = {
+  mobile: boolean;
+}
+
+const Wrapper = styled.div<MobileProp>`
+  height: ${(props): string => (props.mobile ? 'auto' : '245px')};
   
   background: white;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
@@ -29,9 +36,9 @@ const Wrapper = styled.div`
     > div:first-child {
       padding-top: 20px;
 
-      display: flex;
+      display: ${(props): string => (props.mobile ? 'block' : 'flex')};
       
-      height: 100px;
+      height: ${(props): string => (props.mobile ? 'auto' : '100px')};
       
       align-items: center;
       
@@ -39,6 +46,7 @@ const Wrapper = styled.div`
         height: 100px;
         width: 1px;
         background: #CAE7FE;
+        display:${(props): string => (props.mobile ? 'none' : 'block')};
       }
       
       > div {
@@ -46,6 +54,7 @@ const Wrapper = styled.div`
         width: 100%;
         display: flex;
         align-items: center;
+        margin: ${(props): string => (props.mobile ? '25px 0' : '0')};
         
         justify-content: space-around;
         
@@ -54,25 +63,40 @@ const Wrapper = styled.div`
           left: 0;
           color: #00BFA5;
           margin-left: 20px;
+          display:${(props): string => (props.mobile ? 'none' : 'block')};
         }
       }
     }
   }
 `;
 
-const WrappedTexField = styled(TextField)`
-  width: 70%;
+const TextFieldWrapper = styled.div<MobileProp>`
+  width: 100%;
   height: 60px;
   
-  input {
-    font-size: 14px;
+  display: flex;
+  
+  ${(props): string => (props.mobile ? 'padding: 0 10px;' : '')}
+  
+  > *:first-child {
+  
+    width: ${(props): string => (props.mobile ? '100' : '70')}%;
+    
+    margin: 0 auto;
+    
+    input {
+      font-size: 14px;
+    }
   }
+  
 `;
 
-const ButtonWrapper = styled.div`
+const ButtonWrapper = styled.div<MobileProp>`
   width: 100%;
-  height: 125px;
+  height: ${(props): string => (props.mobile ? 'auto' : '125px')};
   display: flex;
+  
+  ${(props): string => (props.mobile ? 'padding: 15px 0; margin-top:-15px;' : '')}
   
   > div {
     margin: auto;
@@ -102,15 +126,7 @@ export const InfoEditor: FC<PropTypes> = (
 
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    if (name !== null && value !== null) {
-      setUserInfo((old) => ({
-        ...old,
-        [name]: value,
-      }));
-    }
-  };
+  const screen = useScreens();
 
   const { username, email, phone } = userInfo;
   const splitEmail = email.split('@');
@@ -149,9 +165,34 @@ export const InfoEditor: FC<PropTypes> = (
   const handleDialogFailed = (): void => {
     setDialogShow(false);
   };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (name !== null && value !== null) {
+      setUserInfo((old) => ({
+        ...old,
+        [name]: value,
+      }));
+    }
+  };
+
+  let mobile = false;
+
+  switch (screen) {
+    case MinWidths.PC:
+      mobile = false;
+      break;
+    case MinWidths.Mobile:
+      mobile = true;
+      break;
+
+    default:
+      // eslint-disable-next-line no-case-declarations,@typescript-eslint/no-unused-vars
+      const x: never = screen;
+  }
   
   return (
-    <Wrapper>
+    <Wrapper mobile={mobile}>
       <DialogWindow
         open={dialogShow}
         onSuccess={handleDialogSuccess}
@@ -165,36 +206,40 @@ export const InfoEditor: FC<PropTypes> = (
         <div>
           <div>
             <AssignmentIndIcon width={30} height={30} />
-            <WrappedTexField
-              onChange={handleChange}
-              placeholder="Укажите вашу фамилию и имя"
-              label="Фамилия и имя"
-              name="username"
-              variant="outlined"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              helperText={submitted && !errors.username.valid && errors.username.message}
-              error={submitted && !errors.username.valid}
-            />
+            <TextFieldWrapper mobile={mobile}>
+              <TextField
+                onChange={handleChange}
+                placeholder="Укажите вашу фамилию и имя"
+                label="Фамилия и имя"
+                name="username"
+                variant="outlined"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                helperText={submitted && !errors.username.valid && errors.username.message}
+                error={submitted && !errors.username.valid}
+              />
+            </TextFieldWrapper>
           </div>
 
           <span />
 
           <div>
             <AlternateEmailIcon width={30} height={30} />
-            <WrappedTexField
-              onChange={handleChange}
-              placeholder="Ivanova@mail.ru"
-              label="E-mail"
-              name="email"
-              variant="outlined"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              helperText={submitted && !errors.email.valid && errors.email.message}
-              error={submitted && !errors.email.valid}
-            />
+            <TextFieldWrapper mobile={mobile}>
+              <TextField
+                onChange={handleChange}
+                placeholder="Ivanova@mail.ru"
+                label="E-mail"
+                name="email"
+                variant="outlined"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                helperText={submitted && !errors.email.valid && errors.email.message}
+                error={submitted && !errors.email.valid}
+              />
+            </TextFieldWrapper>
           </div>
 
           <span />
@@ -209,23 +254,25 @@ export const InfoEditor: FC<PropTypes> = (
               maskChar=" "
             >
               {() => (
-                <WrappedTexField
-                  placeholder="Укажите номер телефона"
-                  label="Номер телефона"
-                  name="phone"
-                  variant="outlined"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  helperText={submitted && !errors.phone.valid && errors.phone.message}
-                  error={submitted && !errors.phone.valid}
-                />
+                <TextFieldWrapper mobile={mobile}>
+                  <TextField
+                    placeholder="Укажите номер телефона"
+                    label="Номер телефона"
+                    name="phone"
+                    variant="outlined"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    helperText={submitted && !errors.phone.valid && errors.phone.message}
+                    error={submitted && !errors.phone.valid}
+                  />
+                </TextFieldWrapper>
               )}
             </InputMask>
           </div>
         </div>
 
-        <ButtonWrapper>
+        <ButtonWrapper mobile={mobile}>
           <RoundButton
             title="Сохранить изменения"
             onClick={handleSubmit}
