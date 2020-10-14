@@ -5,6 +5,8 @@ import {
 } from 'react';
 import styled from 'styled-components';
 
+import InputMask from 'react-input-mask';
+
 // Material components
 import { TextField, withStyles } from '@material-ui/core';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
@@ -132,7 +134,7 @@ export const InfoEditor: FC<PropTypes> = (
       message: 'Неверный формат',
     },
     phone: {
-      valid: phone === '' || /\+7\d{10}$/.test(phone),
+      valid: phone === '' || /\+7 \d{3} \d{3} \d{2} \d{2}$/.test(phone),
       message: 'Неверный формат',
     },
   };
@@ -191,18 +193,27 @@ export const InfoEditor: FC<PropTypes> = (
 
           <div>
             <PhoneIcon width={30} height={30} />
-            <WrappedTexField
+            <InputMask
+              mask="+7 999 999 99 99"
               onChange={handleChange}
-              placeholder="Укажите номер телефона"
-              label="Номер телефона"
-              name="phone"
-              variant="outlined"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              helperText={submitted && !errors.phone.valid && errors.phone.message}
-              error={submitted && !errors.phone.valid}
-            />
+              value={userInfo.phone}
+              disabled={false}
+              maskChar=" "
+            >
+              {() => (
+                <WrappedTexField
+                  placeholder="Укажите номер телефона"
+                  label="Номер телефона"
+                  name="phone"
+                  variant="outlined"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  helperText={submitted && !errors.phone.valid && errors.phone.message}
+                  error={submitted && !errors.phone.valid}
+                />
+              )}
+            </InputMask>
           </div>
         </div>
 
