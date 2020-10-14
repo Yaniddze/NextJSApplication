@@ -7,6 +7,8 @@ import styled from 'styled-components';
 
 import InputMask from 'react-input-mask';
 
+import { DialogWindow } from './DialogWindow';
+
 // Material components
 import { TextField, withStyles } from '@material-ui/core';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
@@ -107,6 +109,7 @@ export const InfoEditor: FC<PropTypes> = (
     email: '',
     phone: '',
   });
+  const [dialogShow, setDialogShow] = useState(false);
 
   const [submitted, setSubmitted] = useState(false);
 
@@ -143,7 +146,7 @@ export const InfoEditor: FC<PropTypes> = (
     event.preventDefault();
 
     if (errors.username.valid && errors.email.valid && errors.phone.valid) {
-      onSubmit(userInfo);
+      setDialogShow(true);
     }
 
     setSubmitted(true);
@@ -151,7 +154,15 @@ export const InfoEditor: FC<PropTypes> = (
   
   return (
     <Wrapper>
-
+      <DialogWindow
+        open={dialogShow}
+        onSuccess={() => {setDialogShow(false)}}
+        onFailed={() => {setDialogShow(false)}}
+        successTitle="Сохранить"
+        failedTitle="Не сохранять"
+        title="Ешеду"
+        text="Сохранить изменения"
+      />
       <form>
 
         <div>
