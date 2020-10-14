@@ -8,13 +8,13 @@ import styled from 'styled-components';
 import InputMask from 'react-input-mask';
 
 // Material components
-import { TextField, withStyles } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import PhoneIcon from '@material-ui/icons/Phone';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import Button from '@material-ui/core/Button';
 
 import { DialogWindow } from './modal';
+import { RoundButton } from './buttons';
 
 const Wrapper = styled.div`
   height: 245px;
@@ -74,21 +74,10 @@ const ButtonWrapper = styled.div`
   height: 125px;
   display: flex;
   
-  > button {
+  > div {
     margin: auto;
   }
 `;
-
-const StyledButton = withStyles({
-  root: {
-    borderRadius: 50,
-    color: 'white',
-    fontSize: '14px',
-    textTransform: 'none',
-    fontWeight: 'normal',
-    padding: '10px 15px',
-  },
-})(Button);
 
 export type FormValues = {
   username: string,
@@ -237,13 +226,10 @@ export const InfoEditor: FC<PropTypes> = (
         </div>
 
         <ButtonWrapper>
-          <StyledButton
+          <RoundButton
+            title="Сохранить изменения"
             onClick={handleSubmit}
-            variant="contained"
-            color="primary"
-          >
-            Сохранить изменения
-          </StyledButton>
+          />
         </ButtonWrapper>
 
       </form>

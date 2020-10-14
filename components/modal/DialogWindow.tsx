@@ -2,10 +2,12 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import { Dialog, withStyles } from '@material-ui/core';
+import { Dialog } from '@material-ui/core';
 
 import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
+
+import { RoundButton, OutlineButton } from '../buttons';
 
 type PropTypes = {
   children?: never;
@@ -32,18 +34,6 @@ const ButtonWrapper = styled.div`
   > * {
     margin: 15px auto;
     width: 200px;
-    
-    > button {
-      width: 100%;
-      
-      text-transform: none;
-      
-      border-radius: 50px;
-      
-      padding: 10px 15px;
-      
-      font-weight: normal;
-    }
   }
 `;
 
@@ -70,12 +60,6 @@ const CloseHolder = styled.div`
     }
   }
 `;
-
-const StyledButton = withStyles({
-  root: {
-    color: 'white',
-  },
-})(Button);
 
 export const DialogWindow: FC<PropTypes> = (
   { 
@@ -108,17 +92,13 @@ export const DialogWindow: FC<PropTypes> = (
 
         <ButtonWrapper>
           <div>
-            <StyledButton color="primary" variant="contained" autoFocus onClick={onSuccess}>
-              {successTitle}
-            </StyledButton>
+            <RoundButton title={successTitle} onClick={onSuccess} />
           </div>
         </ButtonWrapper>
 
         <ButtonWrapper>
           <div>
-            <Button color="primary" variant="outlined" onClick={onFailed}>
-              {failedTitle}
-            </Button>
+            <OutlineButton title={failedTitle} onClick={onFailed} />
           </div>
         </ButtonWrapper>
 
