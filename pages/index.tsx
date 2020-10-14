@@ -15,10 +15,17 @@ import { ModalWindow } from '../components/modal';
 
 // Hooks
 import { useUserStorage } from '../hooks/useUserStorage';
+import { useScreens } from '../hooks/useScreens';
 
-const ContainerWrapper = styled(Container)`
-  & > div {
-    margin-bottom: 30px;
+import { MinWidths } from '../app/screens';
+
+type MobileProp = {
+  mobile: boolean;
+}
+
+const ContainerHolder = styled.div<MobileProp>`
+  & > div > div {
+    margin-bottom: ${(props): string => (props.mobile ? '10' : '30')}px;
   }
 `;
 
@@ -26,6 +33,7 @@ export default function Home(): ReactElement {
   const { user, setUser } = useUserStorage();
   const [editing, setEditing] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
+  const screen = useScreens();
 
   const infoHolder = !editing && (
     <InfoHolder email={user.email} phone={user.phone} />
@@ -54,6 +62,21 @@ export default function Home(): ReactElement {
   const handleAlertClose = (): void => {
     setAlertOpen(false);
   };
+
+  let mobile = false;
+
+  switch (screen) {
+    case MinWidths.PC:
+      mobile = false;
+      break;
+    case MinWidths.Mobile:
+      mobile = true;
+      break;
+
+    default:
+      // eslint-disable-next-line no-case-declarations,@typescript-eslint/no-unused-vars
+      const x: never = screen;
+  }
   
   return (
     <div>
@@ -63,16 +86,18 @@ export default function Home(): ReactElement {
         onClose={handleAlertClose}
       />
       <Header username={user.fullName} />
-      <ContainerWrapper maxWidth="lg">
-        <Title text="Личный профиль" subText="Главная/Личный профиль" />
-        <UserHolder
-          username={user.fullName}
-          onEditChange={handleEditingClick}
-          editing={editing}
-        />
-        {infoHolder}
-        {infoEditor}
-      </ContainerWrapper>
+      <ContainerHolder mobile={mobile}>
+        <Container maxWidth="lg">
+          <Title text="Личный профиль" subText="Главная/Личный профиль" />
+          <UserHolder
+            username={user.fullName}
+            onEditChange={handleEditingClick}
+            editing={editing}
+          />
+          {infoHolder}
+          {infoEditor}
+        </Container>
+      </ContainerHolder>
     </div>
   );
 }
