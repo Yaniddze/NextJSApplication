@@ -13,8 +13,8 @@ import { InfoHolder } from '../components/InfoHolder';
 import { InfoEditor, FormValues } from '../components/InfoEditor';
 import { ModalWindow } from '../components/modal';
 
-// Types
-import { User } from '../domain/types';
+// Hooks
+import { useUserStorage } from '../hooks/useUserStorage';
 
 const ContainerWrapper = styled(Container)`
   & > div {
@@ -23,22 +23,18 @@ const ContainerWrapper = styled(Container)`
 `;
 
 export default function Home(): ReactElement {
-  const [userInfo, setUserInfo] = useState<User>({
-    fullName: 'Иванов Иван Иванович',
-    phone: '',
-    email: 'yanyanyan@mail.ru',
-  });
+  const { user, setUser } = useUserStorage();
   const [editing, setEditing] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
 
   const infoHolder = !editing && (
-    <InfoHolder email={userInfo.email} phone={userInfo.phone} />
+    <InfoHolder email={user.email} phone={user.phone} />
   );
   
   const handleSubmit = (values: FormValues) => {
     setEditing(false);
 
-    setUserInfo({
+    setUser({
       fullName: values.username,
       email: values.email,
       phone: values.phone,
@@ -66,11 +62,11 @@ export default function Home(): ReactElement {
         text="Данные успешно сохранены"
         onClose={handleAlertClose}
       />
-      <Header username={userInfo.fullName} />
+      <Header username={user.fullName} />
       <ContainerWrapper maxWidth="lg">
         <Title text="Личный профиль" subText="Главная/Личный профиль" />
         <UserHolder
-          username={userInfo.fullName}
+          username={user.fullName}
           onEditChange={handleEditingClick}
           editing={editing}
         />
