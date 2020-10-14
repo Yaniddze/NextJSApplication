@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { MinWidths } from '../app/screens';
 
 export const useScreens = (): MinWidths => {
-  const [width, setWidth] = useState(window.innerWidth);
+  const [width, setWidth] = useState(0);
 
   useEffect(() => {
     const handleResize = (): void => {
       setWidth(window.innerWidth);
     };
+
+    setWidth(window.innerWidth);
 
     window.addEventListener('resize', handleResize);
 
