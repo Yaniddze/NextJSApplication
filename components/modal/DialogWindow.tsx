@@ -58,12 +58,12 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const TextHolder = styled.div`
+const TextHolder = styled.div<MobileProp>`
   display: flex;
   
   > div {
     margin: 10px auto;
-    font-size: 25px;
+    font-size: ${(props): string => (props.mobile ? '18' : '24')}px;
   }
 `;
 
@@ -128,7 +128,7 @@ export const DialogWindow: FC<PropTypes> = (
           </div>
         </CloseHolder>
 
-        <TextHolder>
+        <TextHolder mobile={mobile}>
           <div>
             {text}
           </div>
