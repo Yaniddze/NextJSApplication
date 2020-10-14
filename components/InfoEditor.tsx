@@ -1,5 +1,8 @@
 // Core
-import { FC } from 'react';
+import {
+  ChangeEvent,
+  FC, MouseEvent, useState,
+} from 'react';
 import styled from 'styled-components';
 
 // Material components
@@ -83,60 +86,138 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-export const InfoEditor: FC = () => (
-  <Wrapper>
+type FormValues = {
+  username: string,
+  email: string,
+  phone: string,
+}
 
-    <form>
+type PropTypes = {
+  children?: never;
+  onSubmit:(values: FormValues) => void;
+}
 
-      <div>
+export const InfoEditor: FC<PropTypes> = (
+  { onSubmit }: PropTypes,
+) => {
+  const [userInfo, setUserInfo] = useState<FormValues>({
+    username: '',
+    email: '',
+    phone: '',
+  });
+
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (name !== null && value !== null) {
+      setUserInfo((old) => ({
+        ...old,
+        [name]: value,
+      }));
+    }
+  };
+
+  const { username, email, phone } = userInfo;
+  const splitEmail = email.split('@');
+  const splitName = username.split(' ');
+
+  const errors = {
+    username: {
+      valid: splitName.length > 1 && splitName[0].length >= 2 && splitName[1].length >= 2,
+      message: 'Неверный формат',
+    },
+    email: {
+      valid: splitEmail.length === 2 && (splitEmail[1] === 'gmail.com' || splitEmail[1] === 'mail.ru'),
+      message: 'Неверный формат',
+    },
+    phone: {
+      valid: phone === '' || /\+7\d{10}$/.test(phone),
+      message: 'Неверный формат',
+    },
+  };
+
+  const handleSubmit = (event: MouseEvent) => {
+    event.preventDefault();
+
+    if (errors.username.valid && errors.email.valid && errors.phone.valid) {
+      onSubmit(userInfo);
+    }
+
+    setSubmitted(true);
+  };
+  
+  return (
+    <Wrapper>
+
+      <form>
+
         <div>
-          <AssignmentIndIcon width={30} height={30} />
-          <WrappedTexField
-            placeholder="Укажите вашу фамилию и имя"
-            label="Фамилия и имя"
-            variant="outlined"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+          <div>
+            <AssignmentIndIcon width={30} height={30} />
+            <WrappedTexField
+              onChange={handleChange}
+              placeholder="Укажите вашу фамилию и имя"
+              label="Фамилия и имя"
+              name="username"
+              variant="outlined"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              helperText={submitted && !errors.username.valid && errors.username.message}
+              error={submitted && !errors.username.valid}
+            />
+          </div>
+
+          <span />
+
+          <div>
+            <AlternateEmailIcon width={30} height={30} />
+            <WrappedTexField
+              onChange={handleChange}
+              placeholder="Ivanova@mail.ru"
+              label="E-mail"
+              name="email"
+              variant="outlined"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              helperText={submitted && !errors.email.valid && errors.email.message}
+              error={submitted && !errors.email.valid}
+            />
+          </div>
+
+          <span />
+
+          <div>
+            <PhoneIcon width={30} height={30} />
+            <WrappedTexField
+              onChange={handleChange}
+              placeholder="Укажите номер телефона"
+              label="Номер телефона"
+              name="phone"
+              variant="outlined"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              helperText={submitted && !errors.phone.valid && errors.phone.message}
+              error={submitted && !errors.phone.valid}
+            />
+          </div>
         </div>
 
-        <span />
+        <ButtonWrapper>
+          <StyledButton
+            onClick={handleSubmit}
+            variant="contained"
+            color="primary"
+          >
+            Сохранить изменения
+          </StyledButton>
+        </ButtonWrapper>
 
-        <div>
-          <AlternateEmailIcon width={30} height={30} />
-          <WrappedTexField
-            placeholder="Ivanova@mail.ru"
-            label="E-mail"
-            variant="outlined"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </div>
+      </form>
 
-        <span />
-
-        <div>
-          <PhoneIcon width={30} height={30} />
-          <WrappedTexField
-            placeholder="Укажите номер телефона"
-            label="Номер телефона"
-            variant="outlined"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </div>
-      </div>
-
-      <ButtonWrapper>
-        <StyledButton variant="contained" color="primary">
-          Сохранить изменения
-        </StyledButton>
-      </ButtonWrapper>
-
-    </form>
-
-  </Wrapper>
-);
+    </Wrapper>
+  );
+};
