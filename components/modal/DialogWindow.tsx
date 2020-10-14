@@ -4,8 +4,10 @@ import styled from 'styled-components';
 
 import { Dialog } from '@material-ui/core';
 
-import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
+
+import { MinWidths } from '../../app/screens';
+import { useScreens } from '../../hooks/useScreens';
 
 import { RoundButton, OutlineButton } from '../buttons';
 
@@ -19,8 +21,27 @@ type PropTypes = {
   text: string;
 }
 
-const ContentWrapper = styled.div`
-  width: 600px;
+type MobileProp = {
+  mobile: boolean;
+}
+
+const ContentWrapper = styled.div<MobileProp>`
+  ${(prop): string => {
+    if (prop.mobile) {
+      return `
+        width: 100vw;
+        position: fixed;
+        bottom: -10px;
+        left: 0;
+        background: white;
+        border-radius: 10px;
+      `;
+    }  
+    
+    return `
+      width: 600px;
+    `;
+  }}
 `;
 
 const ButtonsHolder = styled.div`
@@ -61,6 +82,13 @@ const CloseHolder = styled.div`
   }
 `;
 
+const StyledDialog = styled(Dialog)`
+  .MuiPaper-root {
+    margin: 0;
+    border-radius: 10px;
+  }
+`;
+
 export const DialogWindow: FC<PropTypes> = (
   { 
     onFailed,
@@ -70,39 +98,57 @@ export const DialogWindow: FC<PropTypes> = (
     successTitle,
     failedTitle,
   }: PropTypes,
-) => (
-  <Dialog
-    open={open}
-    onClose={onFailed}
-    maxWidth="md"
-  >
-    <ContentWrapper>
-      <CloseHolder>
-        <div>
-          <CloseIcon onClick={onFailed} />
-        </div>
-      </CloseHolder>
+) => {
+  const screen = useScreens();
 
-      <TextHolder>
-        <div>
-          {text}
-        </div>
-      </TextHolder>
-      <ButtonsHolder>
+  let mobile = false;
 
-        <ButtonWrapper>
+  switch (screen) {
+    case MinWidths.PC:
+      mobile = false;
+      break;
+    case MinWidths.Mobile:
+      mobile = true;
+      break;
+
+    default:
+      // eslint-disable-next-line no-case-declarations,@typescript-eslint/no-unused-vars
+      const x: never = screen;
+  }
+
+  return (
+    <StyledDialog
+      open={open}
+      onClose={onFailed}
+    >
+      <ContentWrapper mobile={mobile}>
+        <CloseHolder>
           <div>
-            <RoundButton title={successTitle} onClick={onSuccess} />
+            <CloseIcon onClick={onFailed} />
           </div>
-        </ButtonWrapper>
+        </CloseHolder>
 
-        <ButtonWrapper>
+        <TextHolder>
           <div>
-            <OutlineButton title={failedTitle} onClick={onFailed} />
+            {text}
           </div>
-        </ButtonWrapper>
+        </TextHolder>
+        <ButtonsHolder>
 
-      </ButtonsHolder>
-    </ContentWrapper>
-  </Dialog>
-);
+          <ButtonWrapper>
+            <div>
+              <RoundButton title={successTitle} onClick={onSuccess} />
+            </div>
+          </ButtonWrapper>
+
+          <ButtonWrapper>
+            <div>
+              <OutlineButton title={failedTitle} onClick={onFailed} />
+            </div>
+          </ButtonWrapper>
+
+        </ButtonsHolder>
+      </ContentWrapper>
+    </StyledDialog>
+  );
+};
