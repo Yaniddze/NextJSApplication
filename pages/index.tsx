@@ -11,6 +11,7 @@ import { Title } from '../components/Title';
 import { UserHolder } from '../components/UserHolder';
 import { InfoHolder } from '../components/InfoHolder';
 import { InfoEditor, FormValues } from '../components/InfoEditor';
+import { ModalWindow } from '../components/modal';
 
 // Types
 import { User } from '../domain/types';
@@ -28,6 +29,7 @@ export default function Home(): ReactElement {
     email: 'yanyanyan@mail.ru',
   });
   const [editing, setEditing] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const infoHolder = !editing && (
     <InfoHolder email={userInfo.email} phone={userInfo.phone} />
@@ -41,6 +43,8 @@ export default function Home(): ReactElement {
       email: values.email,
       phone: values.phone,
     });
+
+    setAlertOpen(true);
   };
 
   const handleEditingClick = (): void => {
@@ -50,9 +54,18 @@ export default function Home(): ReactElement {
   const infoEditor = editing && (
     <InfoEditor onSubmit={handleSubmit} />
   );
+
+  const handleAlertClose = (): void => {
+    setAlertOpen(false);
+  };
   
   return (
     <div>
+      <ModalWindow
+        opened={alertOpen}
+        text="Данные успешно сохранены"
+        onClose={handleAlertClose}
+      />
       <Header username={userInfo.fullName} />
       <ContainerWrapper maxWidth="lg">
         <Title text="Личный профиль" subText="Главная/Личный профиль" />
